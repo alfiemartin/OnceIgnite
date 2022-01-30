@@ -1,5 +1,5 @@
 import React, { FC } from "react"
-import { View, ViewStyle, TextStyle, ImageStyle, SafeAreaView } from "react-native"
+import { View, ViewStyle, TextStyle, ImageStyle } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import {
@@ -80,7 +80,6 @@ const CONTINUE_TEXT: TextStyle = {
   fontSize: 13,
   letterSpacing: 2,
 }
-const FOOTER: ViewStyle = { backgroundColor: "#20162D" }
 const FOOTER_CONTENT: ViewStyle = {
   paddingVertical: spacing[4],
   paddingHorizontal: spacing[4],
@@ -111,17 +110,15 @@ export const WelcomeScreen: FC<StackScreenProps<NavigatorParamList, "welcome">> 
             using Ignite.
           </Text>
         </Screen>
-        <SafeAreaView style={FOOTER}>
-          <View style={FOOTER_CONTENT}>
-            <Button
-              testID="next-screen-button"
-              style={CONTINUE}
-              textStyle={CONTINUE_TEXT}
-              tx="welcomeScreen.continue"
-              onPress={nextScreen}
-            />
-          </View>
-        </SafeAreaView>
+        <View style={FOOTER_CONTENT}>
+          <Button
+            testID="next-screen-button"
+            style={CONTINUE}
+            textStyle={CONTINUE_TEXT}
+            tx="welcomeScreen.continue"
+            onPress={nextScreen}
+          />
+        </View>
       </View>
     )
   },

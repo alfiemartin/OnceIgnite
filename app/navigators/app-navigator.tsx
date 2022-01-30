@@ -10,6 +10,11 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { WelcomeScreen, DemoScreen, DemoListScreen } from "../screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
+import {
+  createMaterialTopTabNavigator,
+  MaterialTopTabNavigationOptions,
+} from "@react-navigation/material-top-tabs"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -27,10 +32,12 @@ export type NavigatorParamList = {
   welcome: undefined
   demo: undefined
   demoList: undefined
+  tabBar: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
 const Stack = createNativeStackNavigator<NavigatorParamList>()
+const Tab = createMaterialTopTabNavigator()
 
 const AppStack = () => {
   return (
@@ -38,12 +45,27 @@ const AppStack = () => {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="welcome"
+      initialRouteName="tabBar"
     >
-      <Stack.Screen name="welcome" component={WelcomeScreen} />
-      <Stack.Screen name="demo" component={DemoScreen} />
-      <Stack.Screen name="demoList" component={DemoListScreen} />
+      <Stack.Screen name="tabBar" component={AppTabBar} />
     </Stack.Navigator>
+  )
+}
+
+const AppTabBar = () => {
+  const inset = useSafeAreaInsets()
+
+  const screenOptions: MaterialTopTabNavigationOptions = {
+    tabBarItemStyle: { marginBottom: inset.bottom },
+    tabBarIndicator: () => null,
+  }
+
+  return (
+    <Tab.Navigator tabBarPosition="bottom" showPageIndicator={false} screenOptions={screenOptions}>
+      <Tab.Screen name="welcome" component={WelcomeScreen} />
+      <Tab.Screen name="demo" component={DemoScreen} />
+      <Tab.Screen name="demoList" component={DemoListScreen} />
+    </Tab.Navigator>
   )
 }
 
