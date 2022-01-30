@@ -16,7 +16,7 @@ import {
 } from "@react-navigation/material-top-tabs"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { color } from "../theme"
-import { EasyIcon } from "../components"
+import { getTabIcon } from "../components"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -61,8 +61,11 @@ const AppTabBar = () => {
     tabBarItemStyle: { marginBottom: inset.bottom },
     tabBarIndicator: () => null,
     tabBarContentContainerStyle: {
-      backgroundColor: color.palette.orange, //tab bar background
+      backgroundColor: color.palette.black, //tab bar background
     },
+    tabBarLabel: () => null,
+    tabBarInactiveTintColor: color.palette.offWhite,
+    tabBarActiveTintColor: color.palette.orange,
   }
 
   const parentStyles: ViewStyle = {
@@ -74,10 +77,18 @@ const AppTabBar = () => {
       <Tab.Screen
         name="explorer"
         component={ExplorerScreen}
-        options={{ tabBarIcon: ({ color }) => <EasyIcon name="outline-circle" /> }}
+        options={{ tabBarIcon: ({ color }) => getTabIcon(color, "ios-disc-outline") }}
       />
-      <Tab.Screen name="matches" component={MatchesScreen} />
-      <Tab.Screen name="profile" component={ProfileScreen} />
+      <Tab.Screen
+        name="matches"
+        component={MatchesScreen}
+        options={{ tabBarIcon: ({ color }) => getTabIcon(color, "chatbox-ellipses-outline") }}
+      />
+      <Tab.Screen
+        name="profile"
+        component={ProfileScreen}
+        options={{ tabBarIcon: ({ color }) => getTabIcon(color, "person-outline") }}
+      />
     </Tab.Navigator>
   )
 }
