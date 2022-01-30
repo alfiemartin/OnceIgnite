@@ -65,7 +65,7 @@ const AppTabBar = () => {
   }
 
   const parentStyles: ViewStyle = {
-    backgroundColor: color.palette.deepPurple,
+    backgroundColor: color.palette.black,
   }
 
   return (

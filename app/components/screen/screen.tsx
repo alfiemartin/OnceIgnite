@@ -3,7 +3,6 @@ import { KeyboardAvoidingView, Platform, ScrollView, StatusBar, View } from "rea
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { ScreenProps } from "./screen.props"
 import { isNonScrolling, offsets, presets } from "./screen.presets"
-import { Colors } from "react-native/Libraries/NewAppScreen"
 import { color } from "../../theme"
 
 const isIos = Platform.OS === "ios"
