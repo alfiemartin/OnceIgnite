@@ -3,6 +3,8 @@ import { KeyboardAvoidingView, Platform, ScrollView, StatusBar, View } from "rea
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { ScreenProps } from "./screen.props"
 import { isNonScrolling, offsets, presets } from "./screen.presets"
+import { Colors } from "react-native/Libraries/NewAppScreen"
+import { color } from "../../theme"
 
 const isIos = Platform.OS === "ios"
 
@@ -29,7 +31,9 @@ function ScreenWithScrolling(props: ScreenProps) {
   const insets = useSafeAreaInsets()
   const preset = presets.scroll
   const style = props.style || {}
-  const backgroundStyle = props.backgroundColor ? { backgroundColor: props.backgroundColor } : {}
+  const backgroundStyle = props.backgroundColor
+    ? { backgroundColor: props.backgroundColor }
+    : { backgroundColor: color.palette.black }
   const insetStyle = { paddingTop: props.unsafe ? 0 : insets.top }
 
   return (

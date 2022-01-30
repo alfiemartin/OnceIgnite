@@ -5,16 +5,17 @@
  * and a "main" flow which the user will use once logged in.
  */
 import React from "react"
-import { useColorScheme } from "react-native"
+import { useColorScheme, ViewStyle } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { WelcomeScreen, DemoScreen, DemoListScreen } from "../screens"
+import { ExplorerScreen, MatchesScreen, ProfileScreen } from "../screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
   createMaterialTopTabNavigator,
   MaterialTopTabNavigationOptions,
 } from "@react-navigation/material-top-tabs"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { color } from "../theme"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -29,9 +30,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type NavigatorParamList = {
-  welcome: undefined
-  demo: undefined
-  demoList: undefined
+  profile: undefined
+  explorer: undefined
+  matches: undefined
   tabBar: undefined
 }
 
@@ -45,7 +46,7 @@ const AppStack = () => {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="tabBar"
+      initialRouteName="explorer"
     >
       <Stack.Screen name="tabBar" component={AppTabBar} />
     </Stack.Navigator>
@@ -58,13 +59,20 @@ const AppTabBar = () => {
   const screenOptions: MaterialTopTabNavigationOptions = {
     tabBarItemStyle: { marginBottom: inset.bottom },
     tabBarIndicator: () => null,
+    tabBarContentContainerStyle: {
+      backgroundColor: color.palette.orange, //tab bar background
+    },
+  }
+
+  const parentStyles: ViewStyle = {
+    backgroundColor: color.palette.deepPurple,
   }
 
   return (
-    <Tab.Navigator tabBarPosition="bottom" showPageIndicator={false} screenOptions={screenOptions}>
-      <Tab.Screen name="welcome" component={WelcomeScreen} />
-      <Tab.Screen name="demo" component={DemoScreen} />
-      <Tab.Screen name="demoList" component={DemoListScreen} />
+    <Tab.Navigator tabBarPosition="bottom" style={parentStyles} screenOptions={screenOptions}>
+      <Tab.Screen name="explorer" component={ExplorerScreen} />
+      <Tab.Screen name="matches" component={MatchesScreen} />
+      <Tab.Screen name="profile" component={ProfileScreen} />
     </Tab.Navigator>
   )
 }
