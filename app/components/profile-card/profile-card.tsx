@@ -3,13 +3,12 @@ import {
   Dimensions,
   ImageBackground,
   StyleProp,
-  TextStyle,
   View,
   ViewStyle,
   StyleSheet,
+  ImageStyle,
 } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color, typography } from "../../theme"
 import { Text } from "../text/text"
 import { PanGestureHandler } from "react-native-gesture-handler"
 import Animated, {
@@ -24,16 +23,7 @@ import Animated, {
   withTiming,
   WithTimingConfig,
 } from "react-native-reanimated"
-
-const CONTAINER: ViewStyle = {
-  justifyContent: "center",
-}
-
-const TEXT: TextStyle = {
-  fontFamily: typography.primary,
-  fontSize: 14,
-  color: color.primary,
-}
+import { EasyIcon } from "../easy-icon/easy-icon"
 
 export interface ProfileCardProps {
   /**
@@ -156,95 +146,88 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
   }
 
   return (
-    <View style={styles}>
-      <PanGestureHandler onGestureEvent={data && gestureHandler}>
-        <Animated.View style={[viewStyles ?? stylesOld.container, aSwipeStyles]}>
-          <View style={[stylesOld.cardContainer, viewStyles]}>
-            <ImageBackground
-              onLoad={bringNewCard}
-              source={{ uri: data && data.image }}
-              style={[stylesOld.mainImage]}
-              imageStyle={stylesOld.mainImageInner}
-            >
-              <Animated.View style={[stylesOld.swipeIndicatorContainer]}>
-                <Text style={[{ zIndex: 1000, fontSize: 200 }]}>❤️</Text>
-              </Animated.View>
-              <Animated.View style={[stylesOld.swipeIndicatorContainer]}>
-                <Text style={[{ zIndex: 1000, fontSize: 200 }]}>❌</Text>
-              </Animated.View>
-            </ImageBackground>
-            {data && (
-              <View style={[stylesOld.choicesContainer]}>
-                {/* <SwipeIcon name='ios-close-circle' onPress={() => swipeInDirection("left")} />
-              <SwipeIcon name='ios-heart-half' />
-              <SwipeIcon name='heart' onPress={() => swipeInDirection("right")} /> */}
-              </View>
-            )}
+    <PanGestureHandler onGestureEvent={data && gestureHandler}>
+      <Animated.View style={[CONTAINER, aSwipeStyles]}>
+        <ImageBackground
+          onLoad={bringNewCard}
+          source={{ uri: data && data.image }}
+          style={MAIN_IMAGE_CONTAINER}
+          imageStyle={MAIN_IMAGE}
+        >
+          <Animated.View style={SWIPE_IND_CONTAINER}>
+            <Text style={[{ zIndex: 1000, fontSize: 200 }]}>❤️</Text>
+          </Animated.View>
+          <Animated.View style={SWIPE_IND_CONTAINER}>
+            <Text style={[{ zIndex: 1000, fontSize: 200 }]}>❌</Text>
+          </Animated.View>
+        </ImageBackground>
+        {data && (
+          <View style={CHOICES_CONTAINER}>
+            <EasyIcon name="ios-close-circle" onPress={() => swipeInDirection("left")} />
+            <EasyIcon name="ios-heart-half" />
+            <EasyIcon name="heart" onPress={() => swipeInDirection("right")} />
           </View>
-        </Animated.View>
-      </PanGestureHandler>
-    </View>
+        )}
+      </Animated.View>
+    </PanGestureHandler>
   )
 })
 
-const stylesOld = StyleSheet.create({
-  container: {
-    flex: 1,
-    position: "absolute",
-    padding: 20,
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    overflow: "hidden",
+const CONTAINER: ViewStyle = {
+  flex: 1,
+  position: "absolute",
+  padding: 20,
+  left: 0,
+  right: 0,
+  top: 0,
+  bottom: 0,
+  overflow: "hidden",
+  borderRadius: 20,
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 2,
   },
-  cardContainer: {
-    flex: 1,
-    borderRadius: 20,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  mainImage: {
-    flex: 1,
-    justifyContent: "space-between",
-    backgroundColor: "#fbcfe8",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  mainImageInner: {
-    margin: 2,
-    flex: 1,
-    justifyContent: "space-between",
-    backgroundColor: "#fce7f3",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    // borderBottomLeftRadius: 20,
-    // borderBottomRightRadius: 20,
-  },
-  choicesContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    backgroundColor: "#fce7f3",
-    padding: 10,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-  },
-  swipeIndicatorContainer: {
-    position: "absolute",
-    display: "none",
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 1000,
-  },
-})
+  shadowOpacity: 0.25,
+  shadowRadius: 3.84,
+  elevation: 5,
+}
+
+const MAIN_IMAGE_CONTAINER: ViewStyle = {
+  flex: 1,
+  justifyContent: "space-between",
+  backgroundColor: "#fbcfe8",
+  borderTopLeftRadius: 20,
+  borderTopRightRadius: 20,
+}
+
+const MAIN_IMAGE: ImageStyle = {
+  margin: 2,
+  flex: 1,
+  justifyContent: "space-between",
+  backgroundColor: "#fce7f3",
+  borderTopLeftRadius: 20,
+  borderTopRightRadius: 20,
+}
+
+const CHOICES_CONTAINER: ViewStyle = {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  backgroundColor: "#fce7f3",
+  padding: 10,
+  borderBottomLeftRadius: 20,
+  borderBottomRightRadius: 20,
+}
+
+const SWIPE_IND_CONTAINER: ViewStyle = {
+  position: "absolute",
+  display: "none",
+  left: 0,
+  right: 0,
+  top: 0,
+  bottom: 0,
+  flex: 1,
+  justifyContent: "center",
+  alignItems: "center",
+  zIndex: 1000,
+}

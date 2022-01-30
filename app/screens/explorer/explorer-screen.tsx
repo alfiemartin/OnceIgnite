@@ -1,7 +1,7 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
-import { ProfileCard, Screen, Text } from "../../components"
+import { ProfileCard, Screen } from "../../components"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
 import { color } from "../../theme"
@@ -18,16 +18,34 @@ const CARD_CONTAINER: ViewStyle = {
 }
 
 export const ExplorerScreen = observer(function ExplorerScreen() {
-  // Pull in one of our MST stores
   const { profileCardStore } = useStores()
-  // Pull in navigation via hook
-  // const navigation = useNavigation()
+  const { profiles } = profileCardStore
+
+  const [data, setData] = useState(profiles)
+
+  useEffect(() => {
+    const getData = async () => {
+      await profileCardStore.getProfileCards()
+      setData(profiles)
+    }
+
+    getData()
+  }, [])
+
+  const updateCardsUi = () => {
+    setData((old) => {
+      let currentData = old.filter((_, i) => i != 0)
+
+      if (currentData.length == 1) currentData = profiles
+
+      return currentData as typeof profiles
+    })
+  }
 
   return (
     <Screen style={ROOT}>
-      <Text preset="header" text="Explorer" />
       <View style={CARD_CONTAINER}>
-        <ProfileCard />
+        <ProfileCard data={data[0]} updateCardsUi={updateCardsUi} />
       </View>
     </Screen>
   )
