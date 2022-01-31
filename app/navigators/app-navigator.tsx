@@ -7,8 +7,8 @@
 import React from "react"
 import { useColorScheme, ViewStyle } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { ExplorerScreen, MatchesScreen, ProfileScreen } from "../screens"
+import { CardStyleInterpolators, createStackNavigator } from "@react-navigation/stack"
+import { ChatScreen, ExplorerScreen, MatchesScreen, ProfileScreen } from "../screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
   createMaterialTopTabNavigator,
@@ -35,10 +35,11 @@ export type NavigatorParamList = {
   explorer: undefined
   matches: undefined
   tabBar: undefined
+  chat: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
-const Stack = createNativeStackNavigator<NavigatorParamList>()
+const Stack = createStackNavigator<NavigatorParamList>()
 const Tab = createMaterialTopTabNavigator()
 
 const AppStack = () => {
@@ -46,10 +47,13 @@ const AppStack = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
+        gestureDirection: "vertical",
+        cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
       }}
-      initialRouteName="explorer"
+      initialRouteName="tabBar"
     >
       <Stack.Screen name="tabBar" component={AppTabBar} />
+      <Stack.Screen name="chat" options={{}} component={ChatScreen} />
     </Stack.Navigator>
   )
 }
@@ -98,6 +102,7 @@ interface NavigationProps extends Partial<React.ComponentProps<typeof Navigation
 export const AppNavigator = (props: NavigationProps) => {
   const colorScheme = useColorScheme()
   useBackButtonHandler(canExit)
+
   return (
     <NavigationContainer
       ref={navigationRef}
@@ -120,5 +125,5 @@ AppNavigator.displayName = "AppNavigator"
  *
  * `canExit` is used in ./app/app.tsx in the `useBackButtonHandler` hook.
  */
-const exitRoutes = ["welcome"]
+const exitRoutes = ["matches", "explorer", "profile"]
 export const canExit = (routeName: string) => exitRoutes.includes(routeName)

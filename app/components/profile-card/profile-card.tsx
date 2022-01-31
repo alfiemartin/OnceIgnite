@@ -24,6 +24,7 @@ import Animated, {
   WithTimingConfig,
 } from "react-native-reanimated"
 import { EasyIcon } from "../easy-icon/easy-icon"
+import { useEffect } from "react"
 
 export interface ProfileCardProps {
   /**
@@ -34,7 +35,6 @@ export interface ProfileCardProps {
     name: string
     image: string
   }
-  styles?: StyleProp<ViewStyle>
   updateCardsUi?: () => void
 }
 
@@ -49,7 +49,7 @@ const instantTiming: WithTimingConfig = {
  * Describe your component here
  */
 export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps) {
-  const { style, data, styles: viewStyles, updateCardsUi } = props
+  const { style, data, updateCardsUi } = props
   const styles = Object.assign({}, CONTAINER, style)
 
   const screenWidth = Dimensions.get("screen").width
@@ -88,7 +88,7 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
       swipeRotation.value = interpolate(event.translationX, [0, screenWidth], [0, 45])
     },
     onEnd: () => {
-      if (Math.abs(swipeTranslationX.value) > screenWidth * 0.6) {
+      if (Math.abs(swipeTranslationX.value) > screenWidth * 0.5) {
         finishSwipeAnimation()
         return
       }
@@ -132,7 +132,7 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
       withTiming(screenHeight, instantTiming),
     )
 
-    swipeScale.value = withDelay(aSwipeConfig.duration as number, withTiming(0.8, instantTiming))
+    swipeScale.value = withDelay(aSwipeConfig.duration, withTiming(0.8, instantTiming))
 
     swipeRotation.value = withSequence(
       withTiming(right ? 45 : -45, aSwipeConfig),

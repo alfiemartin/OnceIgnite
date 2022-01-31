@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { View, ViewStyle } from "react-native"
+import { Image, View, ViewStyle } from "react-native"
 import { ProfileCard, Screen } from "../../components"
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../../models"
 import { color } from "../../theme"
 import { useStores } from "../../models"
 
@@ -24,15 +22,15 @@ export const ExplorerScreen = observer(function ExplorerScreen() {
   const [data, setData] = useState(profiles)
 
   useEffect(() => {
-    const getData = async () => {
+    ;(async () => {
       await profileCardStore.getProfileCards()
       setData(profiles)
-    }
-
-    getData()
+    })()
   }, [])
 
   const updateCardsUi = () => {
+    Image.prefetch(data[1].image)
+
     setData((old) => {
       let currentData = old.filter((_, i) => i != 0)
 
