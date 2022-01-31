@@ -26,15 +26,7 @@ export interface TabIconProps {
 }
 
 export const TabIcon = ({ color, icon }: TabIconProps) => {
-  return (
-    <View style={{ width: 60, height: 60 }}>
-      <Icon name={icon} size={30} color={color} style={{ alignSelf: "flex-start" }} />
-    </View>
-  )
-}
-
-export const getTabIcon = (color: string, icon: string) => {
-  return <TabIcon color={color} icon={icon} />
+  return <Icon name={icon} size={25} color={color} style={{ alignSelf: "flex-start" }} />
 }
 
 /**

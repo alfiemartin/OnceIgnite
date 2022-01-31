@@ -16,7 +16,7 @@ import {
 } from "@react-navigation/material-top-tabs"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { color } from "../theme"
-import { getTabIcon } from "../components"
+import { TabIcon } from "../components"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -81,17 +81,19 @@ const AppTabBar = () => {
       <Tab.Screen
         name="explorer"
         component={ExplorerScreen}
-        options={{ tabBarIcon: ({ color }) => getTabIcon(color, "ios-disc-outline") }}
+        options={{ tabBarIcon: ({ color }) => <TabIcon color={color} icon="ios-disc-outline" /> }}
       />
       <Tab.Screen
         name="matches"
         component={MatchesScreen}
-        options={{ tabBarIcon: ({ color }) => getTabIcon(color, "chatbox-ellipses-outline") }}
+        options={{
+          tabBarIcon: ({ color }) => <TabIcon color={color} icon="chatbox-ellipses-outline" />,
+        }}
       />
       <Tab.Screen
         name="profile"
         component={ProfileScreen}
-        options={{ tabBarIcon: ({ color }) => getTabIcon(color, "person-outline") }}
+        options={{ tabBarIcon: ({ color }) => <TabIcon color={color} icon="person-outline" /> }}
       />
     </Tab.Navigator>
   )
