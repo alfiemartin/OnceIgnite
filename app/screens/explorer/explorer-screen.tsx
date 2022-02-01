@@ -15,35 +15,24 @@ const CARD_CONTAINER: ViewStyle = {
   flex: 1,
 }
 
-export const ExplorerScreen = observer(function ExplorerScreen() {
+export const ExplorerScreen = observer(function ExplorerScreen(props) {
   const { profileCardStore } = useStores()
   const { profiles } = profileCardStore
-
-  const [data, setData] = useState(profiles)
 
   useEffect(() => {
     ;(async () => {
       await profileCardStore.getProfileCards()
-      setData(profiles)
     })()
   }, [])
 
   const updateCardsUi = () => {
-    Image.prefetch(data[1].image)
-
-    setData((old) => {
-      let currentData = old.filter((_, i) => i != 0)
-
-      if (currentData.length == 1) currentData = profiles
-
-      return currentData as typeof profiles
-    })
+    profileCardStore.popFirstProfile()
   }
 
   return (
     <Screen style={ROOT}>
       <View style={CARD_CONTAINER}>
-        <ProfileCard data={data[0]} updateCardsUi={updateCardsUi} />
+        <ProfileCard data={profiles[0]} updateCardsUi={updateCardsUi} />
       </View>
     </Screen>
   )

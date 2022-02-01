@@ -13,11 +13,7 @@ const ROOT: ViewStyle = {
 }
 
 export const ChatScreen = observer(function ChatScreen() {
-  const navigation = useNavigation()
-
   const [messages, setMessages] = useState<IMessage[]>([])
-  const [inputValue, setInputValue] = useState("")
-
   useEffect(() => {
     setMessages([
       {
@@ -55,7 +51,7 @@ export const ChatScreen = observer(function ChatScreen() {
 
   return (
     <Screen style={ROOT}>
-      <GiftedChat messages={messages} user={user} onSend={onSend} />
+      {/* <GiftedChat messages={messages} user={user} onSend={onSend} /> */}
     </Screen>
   )
 })

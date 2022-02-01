@@ -1,4 +1,4 @@
-import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { getSnapshot, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { ProfileCardModel, ProfileCardSnapshot } from "../profile-card/profile-card"
 import { mockProfileCardData } from "../../../mockData"
 
@@ -20,6 +20,19 @@ export const ProfileCardStoreModel = types
       const results = mockProfileCardData
 
       self.saveProfileCards(results)
+    },
+  }))
+  .actions((self) => ({
+    popFirstProfile: () => {
+      const currentProfiles = getSnapshot(self).profiles
+      const poppedProfiles = currentProfiles.filter((_, i) => i !== 0)
+
+      if (poppedProfiles.length == 0) {
+        self.getProfileCards()
+        return
+      }
+
+      self.profiles.replace(poppedProfiles)
     },
   }))
 

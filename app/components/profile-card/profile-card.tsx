@@ -39,12 +39,12 @@ export interface ProfileCardProps {
 }
 
 const aSwipeConfig: WithTimingConfig = {
-  duration: 150,
+  duration: 1000,
 }
 const instantTiming: WithTimingConfig = {
   duration: 0,
 }
-
+//animations need sorting
 /**
  * Describe your component here
  */
@@ -121,21 +121,18 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
     const right = direction === "right"
 
     swipeTranslationX.value = withSequence(
-      withTiming((right ? screenWidth : -screenWidth) * 1.3, aSwipeConfig),
+      withTiming((right ? screenWidth : -screenWidth) * 1.3, { duration: 300 }),
       withTiming(0, instantTiming, () => {
         if (updateCardsUi) runOnJS(updateCardsUi)()
       }),
     )
 
-    swipeTranslationY.value = withDelay(
-      aSwipeConfig.duration as number,
-      withTiming(screenHeight, instantTiming),
-    )
+    swipeTranslationY.value = withDelay(300 as number, withTiming(screenHeight, instantTiming))
 
-    swipeScale.value = withDelay(aSwipeConfig.duration, withTiming(0.8, instantTiming))
+    swipeScale.value = withDelay(300, withTiming(0.8, instantTiming))
 
     swipeRotation.value = withSequence(
-      withTiming(right ? 45 : -45, aSwipeConfig),
+      withTiming(right ? 45 : -45, { duration: 300 }),
       withTiming(0, instantTiming),
     )
   }
@@ -144,6 +141,10 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
     swipeTranslationY.value = withTiming(0, { duration: 250 })
     swipeScale.value = withTiming(1, { ...aSwipeConfig, easing: Easing.out(Easing.exp) })
   }
+
+  useEffect(() => {
+    console.tron.log("re rebddbdbd")
+  })
 
   return (
     <PanGestureHandler onGestureEvent={data && gestureHandler}>
