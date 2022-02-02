@@ -1,13 +1,5 @@
 import * as React from "react"
-import {
-  Dimensions,
-  ImageBackground,
-  StyleProp,
-  View,
-  ViewStyle,
-  StyleSheet,
-  ImageStyle,
-} from "react-native"
+import { Dimensions, ImageBackground, StyleProp, View, ViewStyle, ImageStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { Text } from "../text/text"
 import { PanGestureHandler } from "react-native-gesture-handler"

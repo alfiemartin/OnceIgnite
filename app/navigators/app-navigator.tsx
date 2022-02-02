@@ -8,7 +8,7 @@ import React from "react"
 import { useColorScheme, ViewStyle } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { CardStyleInterpolators, createStackNavigator } from "@react-navigation/stack"
-import { ChatScreen, ExplorerScreen, MatchesScreen, ProfileScreen } from "../screens"
+import { ChatScreen, ExplorerScreen, MatchesScreen, ProfileScreen, TestScreen } from "../screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
   createMaterialTopTabNavigator,
@@ -36,6 +36,7 @@ export type NavigatorParamList = {
   matches: undefined
   tabBar: undefined
   chat: undefined
+  test: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -94,6 +95,11 @@ const AppTabBar = () => {
         name="profile"
         component={ProfileScreen}
         options={{ tabBarIcon: ({ color }) => <TabIcon color={color} icon="person-outline" /> }}
+      />
+      <Tab.Screen
+        name="test"
+        component={TestScreen}
+        options={{ tabBarIcon: ({ color }) => <TabIcon color={color} icon="build-outline" /> }}
       />
     </Tab.Navigator>
   )
