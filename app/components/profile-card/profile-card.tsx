@@ -99,9 +99,6 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
         {
           rotate: `${swipeRotation.value}deg`,
         },
-        {
-          scale: scale.value,
-        },
       ],
       opacity: swipeOpacity.value,
     }
