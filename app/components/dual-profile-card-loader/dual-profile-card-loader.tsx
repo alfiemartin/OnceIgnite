@@ -7,7 +7,7 @@ import { useStores } from "../../models"
 import { useEffect, useState } from "react"
 
 const CONTAINER: ViewStyle = {
-  justifyContent: "center",
+  justifyContent: "flex-end",
   flex: 1,
 }
 
@@ -24,6 +24,19 @@ export interface DualProfileCardLoaderProps {
   style?: StyleProp<ViewStyle>
 }
 
+const initialCardState = [
+  {
+    cardId: 0,
+    infront: true,
+    counter: 0,
+  },
+  {
+    cardId: 1,
+    infront: false,
+    counter: 1,
+  },
+]
+
 /**
  * Describe your component here
  */
@@ -36,51 +49,48 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
   const { profileCardStore } = useStores()
   const { profiles } = profileCardStore
 
-  const [localProfileData, setLocalProfileData] = useState(profiles)
-  const [cardData, setCardData] = useState([
-    {
-      infront: false,
-      counter: 1,
-    },
-    {
-      infront: true,
-      counter: 0,
-    },
-  ])
+  const [cardData, setCardData] = useState(initialCardState)
 
   useEffect(() => {
     ;(async () => {
       await profileCardStore.getProfileCards()
-      setLocalProfileData(profiles)
     })()
   }, [])
 
-  // const updateZIndex = (infront, cardId) => {
-  //   if()
-  // }
+  const updateCardUi = (cardId: number) => {
+    setCardData((oldData) => {
+      const noMoreProfiles = oldData.some(({ counter }) => {
+        return counter >= profiles.length - 2
+      })
 
-  const updateCardUi = (cardId) => {
-    const { infront, counter } = cardData[cardId]
+      if (noMoreProfiles) {
+        return initialCardState
+      }
 
-    if (infront) {
-      //update to next in data
-    } else {
-      //do not update simply bring to front
-    }
-
-    // const newCardData = cardData.map(({ infront, counter }) => {
-    //   return {
-    //     infront: !infront,
-    //     counter,
-    //   }
-    // })
+      return oldData.map((card) => {
+        return {
+          ...card,
+          infront: !card.infront,
+          counter: card.infront ? card.counter + 2 : card.counter,
+        }
+      })
+    })
   }
 
   return (
     <View style={styles}>
-      <ProfileCard data={localProfileData[1]} cardId={0} />
-      <ProfileCard data={localProfileData[0]} cardId={1} />
-      <Button onPress={() => updateCardUi(0)} />
+      <ProfileCard
+        data={profiles[cardData[0].counter]}
+        cardId={0}
+        inFront={cardData[0].infront}
+        updateCardsUi={updateCardUi}
+      />
+      <ProfileCard
+        data={profiles[cardData[1].counter]}
+        cardId={1}
+        inFront={cardData[1].infront}
+        updateCardsUi={updateCardUi}
+      />
     </View>
   )
 })

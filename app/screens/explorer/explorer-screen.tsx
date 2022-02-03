@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { observer } from "mobx-react-lite"
-import { Image, View, ViewStyle } from "react-native"
-import { ProfileCard, Screen } from "../../components"
+import { View, ViewStyle } from "react-native"
+import { DualProfileCardLoader, Screen } from "../../components"
 import { color } from "../../theme"
-import { useStores } from "../../models"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.black,
@@ -16,23 +15,10 @@ const CARD_CONTAINER: ViewStyle = {
 }
 
 export const ExplorerScreen = observer(function ExplorerScreen(props) {
-  const { profileCardStore } = useStores()
-  const { profiles } = profileCardStore
-
-  useEffect(() => {
-    ;(async () => {
-      await profileCardStore.getProfileCards()
-    })()
-  }, [])
-
-  const updateCardsUi = () => {
-    profileCardStore.popFirstProfile()
-  }
-
   return (
     <Screen style={ROOT}>
       <View style={CARD_CONTAINER}>
-        <ProfileCard data={profiles[0]} updateCardsUi={updateCardsUi} />
+        <DualProfileCardLoader />
       </View>
     </Screen>
   )

@@ -27,8 +27,12 @@ export interface ProfileCardProps {
     name: string
     image: string
   }
-  updateCardsUi?: () => void
+  updateCardsUi?: (cardId: number) => void
+  cardId: number
+  inFront: boolean
 }
+
+type TSwipeDirection = "left" | "right"
 
 const aSwipeConfig: WithTimingConfig = {
   duration: 1000,
@@ -41,15 +45,14 @@ const instantTiming: WithTimingConfig = {
  * Describe your component here
  */
 export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps) {
-  const { style, data, updateCardsUi } = props
+  const { style, data, updateCardsUi, cardId, inFront } = props
   const styles = Object.assign({}, CONTAINER, style)
 
   const screenWidth = Dimensions.get("screen").width
-  const screenHeight = Dimensions.get("screen").height
 
   const swipeTranslationX = useSharedValue(0)
-  const swipeTranslationY = useSharedValue(0)
-  const swipeScale = useSharedValue(1)
+  const swipeOpacity = useSharedValue(1)
+  // const swipeScale = useSharedValue(1)
   const swipeRotation = useSharedValue(0)
 
   const finishSwipeAnimation = () => {
@@ -61,12 +64,11 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
         duration: 50,
       }),
       withTiming(0, instantTiming, () => {
-        if (updateCardsUi) runOnJS(updateCardsUi)()
+        if (updateCardsUi) runOnJS(updateCardsUi)(cardId)
       }),
     )
 
-    swipeTranslationY.value = withDelay(50, withTiming(screenHeight, instantTiming))
-    swipeScale.value = withDelay(50, withTiming(0.1, instantTiming))
+    swipeOpacity.value = withDelay(50, withTiming(0, instantTiming))
 
     swipeRotation.value = withSequence(
       withTiming(right ? 45 : -45, { duration: 50 }),
@@ -97,56 +99,47 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
           translateX: swipeTranslationX.value,
         },
         {
-          translateY: swipeTranslationY.value,
-        },
-        {
-          scale: swipeScale.value,
-        },
-        {
           rotate: `${swipeRotation.value}deg`,
         },
       ],
+      opacity: swipeOpacity.value,
     }
   })
 
-  const swipeInDirection = (direction: string) => {
+  const swipeInDirection = (direction: TSwipeDirection) => {
     const right = direction === "right"
 
     swipeTranslationX.value = withSequence(
       withTiming((right ? screenWidth : -screenWidth) * 1.3, { duration: 300 }),
       withTiming(0, instantTiming, () => {
-        if (updateCardsUi) runOnJS(updateCardsUi)()
+        if (updateCardsUi) runOnJS(updateCardsUi)(cardId)
       }),
     )
-
-    swipeTranslationY.value = withDelay(300 as number, withTiming(screenHeight, instantTiming))
-
-    swipeScale.value = withDelay(300, withTiming(0.8, instantTiming))
 
     swipeRotation.value = withSequence(
       withTiming(right ? 45 : -45, { duration: 300 }),
       withTiming(0, instantTiming),
     )
+
+    swipeOpacity.value = withDelay(300, withTiming(0, instantTiming))
   }
 
   const bringNewCard = () => {
-    swipeTranslationY.value = withTiming(0, { duration: 250 })
-    swipeScale.value = withTiming(1, { ...aSwipeConfig, easing: Easing.out(Easing.exp) })
+    swipeOpacity.value = withTiming(1, instantTiming)
   }
-
-  useEffect(() => {
-    console.tron.log("re rebddbdbd")
-  })
 
   return (
     <PanGestureHandler onGestureEvent={data && gestureHandler}>
-      <Animated.View style={[CONTAINER, aSwipeStyles]}>
+      <Animated.View style={[CONTAINER, styles, aSwipeStyles, { zIndex: inFront ? 10 : 5 }]}>
         <ImageBackground
           onLoad={bringNewCard}
           source={{ uri: data && data.image }}
           style={MAIN_IMAGE_CONTAINER}
           imageStyle={MAIN_IMAGE}
         >
+          <Text style={{ fontSize: 22, color: "black", textAlign: "center" }}>
+            cardId: {cardId}
+          </Text>
           <Animated.View style={SWIPE_IND_CONTAINER}>
             <Text style={[{ zIndex: 1000, fontSize: 200 }]}>❤️</Text>
           </Animated.View>
