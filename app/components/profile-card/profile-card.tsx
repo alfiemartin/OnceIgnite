@@ -7,6 +7,7 @@ import Animated, {
   Easing,
   interpolate,
   runOnJS,
+  SharedValue,
   useAnimatedGestureHandler,
   useAnimatedStyle,
   useSharedValue,
@@ -30,6 +31,7 @@ export interface ProfileCardProps {
   updateCardsUi?: (cardId: number) => void
   cardId: number
   inFront: boolean
+  scale: SharedValue<number>
 }
 
 type TSwipeDirection = "left" | "right"
@@ -40,19 +42,15 @@ const aSwipeConfig: WithTimingConfig = {
 const instantTiming: WithTimingConfig = {
   duration: 0,
 }
-//animations need sorting
-/**
- * Describe your component here
- */
+
 export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps) {
-  const { style, data, updateCardsUi, cardId, inFront } = props
+  const { style, data, updateCardsUi, cardId, inFront, scale } = props
   const styles = Object.assign({}, CONTAINER, style)
 
   const screenWidth = Dimensions.get("screen").width
 
   const swipeTranslationX = useSharedValue(0)
   const swipeOpacity = useSharedValue(1)
-  // const swipeScale = useSharedValue(1)
   const swipeRotation = useSharedValue(0)
 
   const finishSwipeAnimation = () => {
@@ -101,6 +99,9 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
         {
           rotate: `${swipeRotation.value}deg`,
         },
+        {
+          scale: scale.value,
+        },
       ],
       opacity: swipeOpacity.value,
     }
@@ -112,7 +113,9 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
     swipeTranslationX.value = withSequence(
       withTiming((right ? screenWidth : -screenWidth) * 1.3, { duration: 300 }),
       withTiming(0, instantTiming, () => {
-        if (updateCardsUi) runOnJS(updateCardsUi)(cardId)
+        if (updateCardsUi) {
+          runOnJS(updateCardsUi)(cardId)
+        }
       }),
     )
 
@@ -138,7 +141,7 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
           imageStyle={MAIN_IMAGE}
         >
           <Text style={{ fontSize: 22, color: "black", textAlign: "center" }}>
-            cardId: {cardId}
+            cardId: {cardId}; inFront: {inFront ? "yes" : "no"}; scale: {scale.value}
           </Text>
           <Animated.View style={SWIPE_IND_CONTAINER}>
             <Text style={[{ zIndex: 1000, fontSize: 200 }]}>❤️</Text>

@@ -5,16 +5,11 @@ import { color, typography } from "../../theme"
 import { Button, ProfileCard } from ".."
 import { useStores } from "../../models"
 import { useEffect, useState } from "react"
+import { useSharedValue, withTiming } from "react-native-reanimated"
 
 const CONTAINER: ViewStyle = {
   justifyContent: "flex-end",
   flex: 1,
-}
-
-const TEXT: TextStyle = {
-  fontFamily: typography.primary,
-  fontSize: 14,
-  color: color.primary,
 }
 
 export interface DualProfileCardLoaderProps {
@@ -23,19 +18,6 @@ export interface DualProfileCardLoaderProps {
    */
   style?: StyleProp<ViewStyle>
 }
-
-const initialCardState = [
-  {
-    cardId: 0,
-    infront: true,
-    counter: 0,
-  },
-  {
-    cardId: 1,
-    infront: false,
-    counter: 1,
-  },
-]
 
 /**
  * Describe your component here
@@ -48,7 +30,20 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
 
   const { profileCardStore } = useStores()
   const { profiles } = profileCardStore
-
+  const initialCardState = [
+    {
+      cardId: 0,
+      infront: true,
+      counter: 0,
+      scale: useSharedValue(1),
+    },
+    {
+      cardId: 1,
+      infront: false,
+      counter: 1,
+      scale: useSharedValue(0.9),
+    },
+  ]
   const [cardData, setCardData] = useState(initialCardState)
 
   useEffect(() => {
@@ -79,21 +74,18 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
 
   return (
     <View style={styles}>
-      <ProfileCard
-        data={profiles[cardData[0].counter]}
-        cardId={0}
-        inFront={cardData[0].infront}
-        updateCardsUi={updateCardUi}
-      />
-      <ProfileCard
-        data={profiles[cardData[1].counter]}
-        cardId={1}
-        inFront={cardData[1].infront}
-        updateCardsUi={updateCardUi}
-      />
+      {cardData.map((card) => {
+        return (
+          <ProfileCard
+            key={card.cardId}
+            data={profiles[card.counter]}
+            cardId={card.cardId}
+            inFront={card.infront}
+            updateCardsUi={updateCardUi}
+            scale={card.scale}
+          />
+        )
+      })}
     </View>
   )
 })
-
-//need to alternate which card is shown each swipe
-//when a swipe occures, that card goes to the back, new data loaded into it
