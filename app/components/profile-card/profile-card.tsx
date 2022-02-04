@@ -17,7 +17,11 @@ import Animated, {
   WithTimingConfig,
 } from "react-native-reanimated"
 import { EasyIcon } from "../easy-icon/easy-icon"
-import { useEffect } from "react"
+
+export interface IUpdateCardUI {
+  cardId: number
+  onlyScale: boolean
+}
 
 export interface ProfileCardProps {
   /**
@@ -28,10 +32,10 @@ export interface ProfileCardProps {
     name: string
     image: string
   }
-  updateCardsUi?: (cardId: number) => void
+  updateCardsUi?: (cardId?: number, onlyScale?: boolean) => void
   cardId: number
   inFront: boolean
-  scale: SharedValue<number>
+  scale: number
 }
 
 type TSwipeDirection = "left" | "right"
@@ -99,6 +103,9 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
         {
           rotate: `${swipeRotation.value}deg`,
         },
+        {
+          scale: withTiming(scale, inFront ? instantTiming : { duration: 150 }),
+        },
       ],
       opacity: swipeOpacity.value,
     }
@@ -115,6 +122,8 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
         }
       }),
     )
+
+    updateCardsUi(null, true)
 
     swipeRotation.value = withSequence(
       withTiming(right ? 45 : -45, { duration: 300 }),
@@ -138,7 +147,7 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
           imageStyle={MAIN_IMAGE}
         >
           <Text style={{ fontSize: 22, color: "black", textAlign: "center" }}>
-            cardId: {cardId}; inFront: {inFront ? "yes" : "no"}; scale: {scale.value}
+            cardId: {cardId}; inFront: {inFront ? "yes" : "no"}; scale: {scale}
           </Text>
           <Animated.View style={SWIPE_IND_CONTAINER}>
             <Text style={[{ zIndex: 1000, fontSize: 200 }]}>❤️</Text>

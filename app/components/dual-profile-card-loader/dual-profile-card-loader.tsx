@@ -1,7 +1,6 @@
 import * as React from "react"
 import { StyleProp, TextStyle, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color, typography } from "../../theme"
 import { Button, ProfileCard } from ".."
 import { useStores } from "../../models"
 import { useEffect, useState } from "react"
@@ -35,13 +34,13 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
       cardId: 0,
       infront: true,
       counter: 0,
-      scale: useSharedValue(1),
+      scale: useSharedValue(1).value,
     },
     {
       cardId: 1,
       infront: false,
       counter: 1,
-      scale: useSharedValue(0.9),
+      scale: useSharedValue(0.9).value,
     },
   ]
   const [cardData, setCardData] = useState(initialCardState)
@@ -52,7 +51,33 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
     })()
   }, [])
 
-  const updateCardUi = (cardId: number) => {
+  const updateCardUi = (cardId: number, onlyScale: boolean) => {
+    // if (onlyScale) {
+    //   setCardData((oldData) => {
+    //     return oldData.map((card) => {
+    //       return {
+    //         ...card,
+    //         scale: card.scale == 0.9 ? 1 : 0.9,
+    //       }
+    //     })
+    //   })
+
+    //   return
+    // }
+
+    if (onlyScale) {
+      setCardData((oldData) => {
+        return oldData.map((card) => {
+          return {
+            ...card,
+            scale: card.scale == 0.9 ? 1.0 : 0.9,
+          }
+        })
+      })
+
+      return
+    }
+
     setCardData((oldData) => {
       const noMoreProfiles = oldData.some(({ counter }) => {
         return counter >= profiles.length - 2
@@ -65,6 +90,7 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
       return oldData.map((card) => {
         return {
           ...card,
+          // scale: card.scale == 0.9 ? 1 : 0.9,
           infront: !card.infront,
           counter: card.infront ? card.counter + 2 : card.counter,
         }
