@@ -84,12 +84,34 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
     })
   }
 
-  const setGestureScale = (scale: number) => {
+  const setGestureScale = (scale: number, inFront: boolean) => {
+    setCardData((oldData) => {
+      return oldData.map((card) => {
+        return {
+          ...card,
+          scale: !card.infront ? scale : 0.9,
+        }
+      })
+    })
+  }
+
+  const scaleBackCard = (scale) => {
     setCardData((oldData) => {
       return oldData.map((card) => {
         return {
           ...card,
           scale: !card.infront ? scale : card.scale,
+        }
+      })
+    })
+  }
+
+  const scaleFrontCard = (scale) => {
+    setCardData((oldData) => {
+      return oldData.map((card) => {
+        return {
+          ...card,
+          scale: card.infront ? scale : card.scale,
         }
       })
     })
@@ -107,6 +129,8 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
             updateCardsUi={updateCardUi}
             scale={card.scale}
             setGestureScale={setGestureScale}
+            scaleBackCard={scaleBackCard}
+            scaleFrontCard={scaleFrontCard}
           />
         )
       })}

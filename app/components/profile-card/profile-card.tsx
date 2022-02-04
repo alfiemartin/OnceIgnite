@@ -17,6 +17,7 @@ import Animated, {
   WithTimingConfig,
 } from "react-native-reanimated"
 import { EasyIcon } from "../easy-icon/easy-icon"
+import { useEffect } from "react"
 
 export interface IUpdateCardUI {
   cardId: number
@@ -36,7 +37,9 @@ export interface ProfileCardProps {
   cardId: number
   inFront: boolean
   scale: number
-  setGestureScale?: (scale: number) => void
+  setGestureScale?: (scale: number, inFront: boolean) => void
+  scaleBackCard?: any
+  scaleFrontCard?: any
 }
 
 type TSwipeDirection = "left" | "right"
@@ -49,7 +52,16 @@ const instantTiming: WithTimingConfig = {
 }
 
 export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps) {
-  const { style, data, updateCardsUi, cardId, inFront, scale, setGestureScale } = props
+  const {
+    style,
+    data,
+    updateCardsUi,
+    cardId,
+    inFront,
+    scale,
+    scaleBackCard,
+    scaleFrontCard,
+  } = props
   const styles = Object.assign({}, CONTAINER, style)
 
   const screenWidth = Dimensions.get("screen").width
@@ -63,9 +75,13 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
     const right = swipeTranslationX.value > 0
 
     swipeTranslationX.value = withSequence(
-      withTiming(right ? screenWidth * 1.5 : -screenWidth * 1.5, {
-        duration: 50,
-      }),
+      withTiming(
+        right ? screenWidth * 1.5 : -screenWidth * 1.5,
+        {
+          duration: 50,
+        },
+        () => runOnJS(scaleFrontCard)(0.9),
+      ),
       withTiming(0, instantTiming, () => {
         if (updateCardsUi) runOnJS(updateCardsUi)(cardId)
       }),
@@ -84,12 +100,16 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
       swipeTranslationX.value = event.translationX
       swipeRotation.value = interpolate(event.translationX, [0, screenWidth], [0, 45])
 
-      runOnJS(setGestureScale)(interpolate(event.translationX, [0, screenWidth], [0.9, 1]))
+      //scale back card to ~1
+      runOnJS(scaleBackCard)(interpolate(event.translationX, [0, screenWidth], [0.9, 1]))
     },
     onEnd: () => {
       if (Math.abs(swipeTranslationX.value) > screenWidth * 0.5) {
         finishSwipeAnimation()
-        runOnJS(setGestureScale)(1)
+
+        //scale back card to 1
+        runOnJS(scaleBackCard)(1)
+
         return
       }
 
@@ -108,10 +128,7 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
           rotate: `${swipeRotation.value}deg`,
         },
         {
-          scale: withTiming(
-            scale,
-            inFront ? instantTiming : { duration: 150, easing: Easing.out(Easing.ease) },
-          ),
+          scale: withTiming(scale, { duration: 150, easing: Easing.out(Easing.ease) }),
         },
       ],
       opacity: swipeOpacity.value,
@@ -122,7 +139,9 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
     const right = direction === "right"
 
     swipeTranslationX.value = withSequence(
-      withTiming((right ? screenWidth : -screenWidth) * 1.3, { duration: 300 }),
+      withTiming((right ? screenWidth : -screenWidth) * 1.3, { duration: 300 }, () =>
+        runOnJS(scaleFrontCard)(0.9),
+      ),
       withTiming(0, instantTiming, () => {
         if (updateCardsUi) {
           runOnJS(updateCardsUi)(cardId)
@@ -130,7 +149,7 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
       }),
     )
 
-    updateCardsUi(null, true)
+    scaleBackCard(1)
 
     swipeRotation.value = withSequence(
       withTiming(right ? 45 : -45, { duration: 300 }),
@@ -153,9 +172,6 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
           style={MAIN_IMAGE_CONTAINER}
           imageStyle={MAIN_IMAGE}
         >
-          <Text style={{ fontSize: 22, color: "black", textAlign: "center" }}>
-            cardId: {cardId}; inFront: {inFront ? "yes" : "no"}; scale: {scale}
-          </Text>
           <Animated.View style={SWIPE_IND_CONTAINER}>
             <Text style={[{ zIndex: 1000, fontSize: 200 }]}>❤️</Text>
           </Animated.View>
