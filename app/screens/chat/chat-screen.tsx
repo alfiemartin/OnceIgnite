@@ -6,6 +6,7 @@ import { color } from "../../theme"
 import { useNavigation } from "@react-navigation/native"
 import { GiftedChat, IMessage, User } from "react-native-gifted-chat"
 import { mockProfileCardData } from "../../../mockData"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.black,
@@ -14,6 +15,10 @@ const ROOT: ViewStyle = {
 
 export const ChatScreen = observer(function ChatScreen() {
   const [messages, setMessages] = useState<IMessage[]>([])
+  const inset = useSafeAreaInsets()
+
+  const navigation = useNavigation()
+
   useEffect(() => {
     setMessages([
       {
@@ -51,7 +56,11 @@ export const ChatScreen = observer(function ChatScreen() {
 
   return (
     <Screen style={ROOT} noKeyboardAvoid={true}>
-      <GiftedChat messages={messages} user={user} onSend={onSend} />
+      <GiftedChat bottomOffset={inset.bottom} messages={messages} user={user} onSend={onSend} />
+      <Button
+        style={{ position: "absolute", top: inset.top }}
+        onPress={() => navigation.navigate("tabBar")}
+      />
     </Screen>
   )
 })
