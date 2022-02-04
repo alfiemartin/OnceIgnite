@@ -1,10 +1,10 @@
 import * as React from "react"
-import { StyleProp, TextStyle, View, ViewStyle } from "react-native"
+import { StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { Button, ProfileCard } from ".."
+import { ProfileCard } from ".."
 import { useStores } from "../../models"
 import { useEffect, useState } from "react"
-import { useSharedValue, withTiming } from "react-native-reanimated"
+import { useSharedValue } from "react-native-reanimated"
 
 const CONTAINER: ViewStyle = {
   justifyContent: "flex-end",

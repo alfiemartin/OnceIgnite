@@ -7,7 +7,6 @@ import Animated, {
   Easing,
   interpolate,
   runOnJS,
-  SharedValue,
   useAnimatedGestureHandler,
   useAnimatedStyle,
   useSharedValue,
@@ -17,7 +16,6 @@ import Animated, {
   WithTimingConfig,
 } from "react-native-reanimated"
 import { EasyIcon } from "../easy-icon/easy-icon"
-import { useEffect } from "react"
 
 export interface IUpdateCardUI {
   cardId: number
@@ -99,7 +97,7 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
       swipeTranslationX.value = event.translationX
       swipeRotation.value = interpolate(event.translationX, [0, screenWidth], [0, 45])
 
-      runOnJS(scaleBackCard)(interpolate(event.translationX, [0, screenWidth], [0.9, 1]))
+      runOnJS(scaleBackCard)(interpolate(Math.abs(event.translationX), [0, screenWidth], [0.9, 1]))
     },
     onEnd: () => {
       if (Math.abs(swipeTranslationX.value) > screenWidth * 0.5) {
