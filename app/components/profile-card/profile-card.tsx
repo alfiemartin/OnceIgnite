@@ -36,6 +36,7 @@ export interface ProfileCardProps {
   cardId: number
   inFront: boolean
   scale: number
+  setGestureScale?: (scale: number) => void
 }
 
 type TSwipeDirection = "left" | "right"
@@ -48,7 +49,7 @@ const instantTiming: WithTimingConfig = {
 }
 
 export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps) {
-  const { style, data, updateCardsUi, cardId, inFront, scale } = props
+  const { style, data, updateCardsUi, cardId, inFront, scale, setGestureScale } = props
   const styles = Object.assign({}, CONTAINER, style)
 
   const screenWidth = Dimensions.get("screen").width
@@ -82,10 +83,13 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
     onActive: (event, ctx) => {
       swipeTranslationX.value = event.translationX
       swipeRotation.value = interpolate(event.translationX, [0, screenWidth], [0, 45])
+
+      runOnJS(setGestureScale)(interpolate(event.translationX, [0, screenWidth], [0.9, 1]))
     },
     onEnd: () => {
       if (Math.abs(swipeTranslationX.value) > screenWidth * 0.5) {
         finishSwipeAnimation()
+        runOnJS(setGestureScale)(1)
         return
       }
 
@@ -104,7 +108,10 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
           rotate: `${swipeRotation.value}deg`,
         },
         {
-          scale: withTiming(scale, inFront ? instantTiming : { duration: 150 }),
+          scale: withTiming(
+            scale,
+            inFront ? instantTiming : { duration: 150, easing: Easing.out(Easing.ease) },
+          ),
         },
       ],
       opacity: swipeOpacity.value,
