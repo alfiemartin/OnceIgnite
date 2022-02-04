@@ -51,20 +51,7 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
     })()
   }, [])
 
-  const updateCardUi = (cardId: number, onlyScale: boolean) => {
-    if (onlyScale) {
-      setCardData((oldData) => {
-        return oldData.map((card) => {
-          return {
-            ...card,
-            scale: card.scale == 0.9 ? 1.0 : 0.9, //TODO
-          }
-        })
-      })
-
-      return
-    }
-
+  const updateCardUi = () => {
     setCardData((oldData) => {
       const noMoreProfiles = oldData.some(({ counter }) => {
         return counter >= profiles.length - 2
@@ -84,18 +71,7 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
     })
   }
 
-  const setGestureScale = (scale: number, inFront: boolean) => {
-    setCardData((oldData) => {
-      return oldData.map((card) => {
-        return {
-          ...card,
-          scale: !card.infront ? scale : 0.9,
-        }
-      })
-    })
-  }
-
-  const scaleBackCard = (scale) => {
+  const scaleBackCard = (scale: number) => {
     setCardData((oldData) => {
       return oldData.map((card) => {
         return {
@@ -106,7 +82,7 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
     })
   }
 
-  const scaleFrontCard = (scale) => {
+  const scaleFrontCard = (scale: number) => {
     setCardData((oldData) => {
       return oldData.map((card) => {
         return {
@@ -128,7 +104,6 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
             inFront={card.infront}
             updateCardsUi={updateCardUi}
             scale={card.scale}
-            setGestureScale={setGestureScale}
             scaleBackCard={scaleBackCard}
             scaleFrontCard={scaleFrontCard}
           />

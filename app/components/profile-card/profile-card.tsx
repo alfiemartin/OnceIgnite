@@ -33,19 +33,18 @@ export interface ProfileCardProps {
     name: string
     image: string
   }
-  updateCardsUi?: (cardId?: number, onlyScale?: boolean) => void
+  updateCardsUi?: (cardId?: number) => void
   cardId: number
   inFront: boolean
   scale: number
-  setGestureScale?: (scale: number, inFront: boolean) => void
-  scaleBackCard?: any
-  scaleFrontCard?: any
+  scaleBackCard?: (scale: number) => void
+  scaleFrontCard?: (scale: number) => void
 }
 
 type TSwipeDirection = "left" | "right"
 
 const aSwipeConfig: WithTimingConfig = {
-  duration: 1000,
+  duration: 300,
 }
 const instantTiming: WithTimingConfig = {
   duration: 0,
@@ -78,19 +77,19 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
       withTiming(
         right ? screenWidth * 1.5 : -screenWidth * 1.5,
         {
-          duration: 50,
+          duration: 200,
         },
         () => runOnJS(scaleFrontCard)(0.9),
       ),
       withTiming(0, instantTiming, () => {
-        if (updateCardsUi) runOnJS(updateCardsUi)(cardId)
+        if (updateCardsUi) runOnJS(updateCardsUi)()
       }),
     )
 
-    swipeOpacity.value = withDelay(50, withTiming(0, instantTiming))
+    swipeOpacity.value = withDelay(200, withTiming(0, instantTiming))
 
     swipeRotation.value = withSequence(
-      withTiming(right ? 45 : -45, { duration: 50 }),
+      withTiming(right ? 45 : -45, { duration: 200 }),
       withTiming(0, instantTiming),
     )
   }
@@ -100,19 +99,16 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
       swipeTranslationX.value = event.translationX
       swipeRotation.value = interpolate(event.translationX, [0, screenWidth], [0, 45])
 
-      //scale back card to ~1
       runOnJS(scaleBackCard)(interpolate(event.translationX, [0, screenWidth], [0.9, 1]))
     },
     onEnd: () => {
       if (Math.abs(swipeTranslationX.value) > screenWidth * 0.5) {
         finishSwipeAnimation()
-
-        //scale back card to 1
         runOnJS(scaleBackCard)(1)
-
         return
       }
 
+      runOnJS(scaleBackCard)(0.9)
       swipeTranslationX.value = withTiming(0, aSwipeConfig)
       swipeRotation.value = withTiming(0, aSwipeConfig)
     },
