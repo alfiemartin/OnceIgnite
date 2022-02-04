@@ -94,12 +94,16 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
 
   const gestureHandler = useAnimatedGestureHandler({
     onActive: (event, ctx) => {
+      if (!inFront) return
+
       swipeTranslationX.value = event.translationX
       swipeRotation.value = interpolate(event.translationX, [0, screenWidth], [0, 45])
 
       runOnJS(scaleBackCard)(interpolate(Math.abs(event.translationX), [0, screenWidth], [0.9, 1]))
     },
     onEnd: () => {
+      if (!inFront) return
+
       if (Math.abs(swipeTranslationX.value) > screenWidth * 0.5) {
         finishSwipeAnimation()
         runOnJS(scaleBackCard)(1)
@@ -131,6 +135,7 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
 
   const swipeInDirection = (direction: TSwipeDirection) => {
     const right = direction === "right"
+    if (!inFront) return
 
     swipeTranslationX.value = withSequence(
       withTiming((right ? screenWidth : -screenWidth) * 1.3, { duration: 300 }, () =>

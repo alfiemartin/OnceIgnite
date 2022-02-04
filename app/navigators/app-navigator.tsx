@@ -5,7 +5,7 @@
  * and a "main" flow which the user will use once logged in.
  */
 import React from "react"
-import { useColorScheme, ViewStyle } from "react-native"
+import { useColorScheme, View, ViewStyle } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { CardStyleInterpolators, createStackNavigator } from "@react-navigation/stack"
 import { ChatScreen, ExplorerScreen, MatchesScreen, ProfileScreen, TestScreen } from "../screens"
@@ -48,13 +48,15 @@ const AppStack = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        gestureDirection: "vertical",
-        cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
       }}
       initialRouteName="tabBar"
     >
       <Stack.Screen name="tabBar" component={AppTabBar} />
-      <Stack.Screen name="chat" options={{}} component={ChatScreen} />
+      <Stack.Screen
+        name="chat"
+        options={{ gestureEnabled: false, headerShown: true }}
+        component={ChatScreen}
+      />
     </Stack.Navigator>
   )
 }

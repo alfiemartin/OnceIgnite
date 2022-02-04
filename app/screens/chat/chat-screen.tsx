@@ -21,7 +21,7 @@ export const ChatScreen = observer(function ChatScreen() {
         text: "from another dev",
         createdAt: new Date(),
         user: {
-          _id: 2,
+          _id: -1,
           name: "React Native",
           avatar: mockProfileCardData[0].image,
         },
@@ -31,7 +31,7 @@ export const ChatScreen = observer(function ChatScreen() {
         text: "Hello developer",
         createdAt: new Date(),
         user: {
-          _id: 2,
+          _id: -1,
           name: "React Native",
           avatar: mockProfileCardData[0].image,
         },
@@ -50,8 +50,8 @@ export const ChatScreen = observer(function ChatScreen() {
   }, [])
 
   return (
-    <Screen style={ROOT}>
-      {/* <GiftedChat messages={messages} user={user} onSend={onSend} /> */}
+    <Screen style={ROOT} noKeyboardAvoid={true}>
+      <GiftedChat messages={messages} user={user} onSend={onSend} />
     </Screen>
   )
 })

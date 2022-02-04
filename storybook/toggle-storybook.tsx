@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react"
 import { DevSettings } from "react-native"
 import { loadString, saveString } from "../app/utils/storage"
 import { DEFAULT_REACTOTRON_WS_URI } from "../app/services/reactotron/reactotron-config"
+import { Button } from "../app/components"
 
 /**
  * Toggle Storybook mode, in __DEV__ mode only.
@@ -54,6 +55,7 @@ export function ToggleStorybook(props) {
         if (data.type === "storybook") {
           saveString("devStorybook", data.payload ? "on" : "off")
           setShowStorybook(data.payload)
+          console.log(data.payload)
         }
       }
       ws.current.onerror = (e) => {
@@ -63,8 +65,22 @@ export function ToggleStorybook(props) {
     })
   }, [])
 
+  const closeSB = () => {
+    setShowStorybook(false)
+    saveString("devStorybook", "off")
+  }
+
   if (showStorybook) {
-    return StorybookUIRoot ? <StorybookUIRoot /> : null
+    return StorybookUIRoot ? (
+      <>
+        <StorybookUIRoot />
+        <Button
+          onPress={closeSB}
+          text="Close Storybook"
+          style={{ position: "absolute", bottom: 0, right: 30 }}
+        />
+      </>
+    ) : null
   } else {
     return props.children
   }
