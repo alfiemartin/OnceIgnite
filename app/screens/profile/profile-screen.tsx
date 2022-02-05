@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import { ImageBackground, ScrollView, ScrollViewProps, View, ViewStyle } from "react-native"
+import { ScrollView, View, ViewStyle } from "react-native"
 import { EasyIcon, ImageBox, Screen, Text } from "../../components"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
