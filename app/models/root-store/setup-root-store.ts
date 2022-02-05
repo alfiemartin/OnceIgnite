@@ -38,10 +38,11 @@ export async function setupRootStore() {
     // if there's any problems loading, then let's at least fallback to an empty state
     // instead of crashing.
     rootStore = RootStoreModel.create({}, env)
-
     // but please inform us what happened
     __DEV__ && console.tron.error(e.message, null)
   }
+
+  await rootStore.profileCardStore.getProfileCards() //fetch profiles automatically on app load
 
   // reactotron logging
   if (__DEV__) {
