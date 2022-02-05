@@ -9,5 +9,13 @@ export interface GradientBackgroundProps {
 }
 
 export function GradientBackground(props: GradientBackgroundProps) {
-  return <LinearGradient colors={props.colors} style={BG_GRADIENT} />
+  return (
+    <LinearGradient
+      locations={[0, 0.05]}
+      start={[0, 0]}
+      end={[1, 0]}
+      colors={props.colors}
+      style={BG_GRADIENT}
+    />
+  )
 }

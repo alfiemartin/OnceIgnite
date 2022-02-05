@@ -4,7 +4,7 @@
  * Generally speaking, it will contain an auth flow (registration, login, forgot password)
  * and a "main" flow which the user will use once logged in.
  */
-import React from "react"
+import React, { useState } from "react"
 import { useColorScheme, View, ViewStyle } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { CardStyleInterpolators, createStackNavigator } from "@react-navigation/stack"
@@ -16,7 +16,7 @@ import {
 } from "@react-navigation/material-top-tabs"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { color } from "../theme"
-import { TabIcon } from "../components"
+import { GradientBackground, TabIcon } from "../components"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -47,16 +47,31 @@ const Stack = createStackNavigator<StackNavigatorParamList>()
 const Tab = createMaterialTopTabNavigator<TabNavigatorParamList>()
 
 const AppStack = () => {
+  const [showSideOverlay, setShowSideOverlay] = useState(true)
+
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        cardOverlay: () => <View style={{ flex: 1, backgroundColor: "black" }}></View>,
+        cardOverlay: () => (
+          <View style={{ flex: 1 }}>
+            {showSideOverlay ? <GradientBackground colors={["black", "transparent"]} /> : null}
+          </View>
+        ),
+        cardOverlayEnabled: true,
       }}
       initialRouteName="tabBar"
     >
       <Stack.Screen name="tabBar" component={AppTabBar} />
-      <Stack.Screen name="chat" options={{ headerShown: true }} component={ChatScreen} />
+      <Stack.Screen
+        name="chat"
+        options={{ headerShown: true }}
+        component={ChatScreen}
+        listeners={{
+          transitionEnd: () => setShowSideOverlay(false),
+          transitionStart: () => setShowSideOverlay(true),
+        }}
+      />
     </Stack.Navigator>
   )
 }
