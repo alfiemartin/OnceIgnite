@@ -5,7 +5,7 @@
  * and a "main" flow which the user will use once logged in.
  */
 import React from "react"
-import { useColorScheme, ViewStyle } from "react-native"
+import { useColorScheme, View, ViewStyle } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { CardStyleInterpolators, createStackNavigator } from "@react-navigation/stack"
 import { ChatScreen, ExplorerScreen, MatchesScreen, ProfileScreen, TestScreen } from "../screens"
@@ -30,24 +30,28 @@ import { TabIcon } from "../components"
  *   https://reactnavigation.org/docs/params/
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
-export type NavigatorParamList = {
+export type StackNavigatorParamList = {
+  tabBar: undefined
+  chat: undefined
+}
+
+export type TabNavigatorParamList = {
   profile: undefined
   explorer: undefined
   matches: undefined
-  tabBar: undefined
-  chat: undefined
   test: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
-const Stack = createStackNavigator<NavigatorParamList>()
-const Tab = createMaterialTopTabNavigator()
+const Stack = createStackNavigator<StackNavigatorParamList>()
+const Tab = createMaterialTopTabNavigator<TabNavigatorParamList>()
 
 const AppStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
+        cardOverlay: () => <View style={{ flex: 1, backgroundColor: "black" }}></View>,
       }}
       initialRouteName="tabBar"
     >
