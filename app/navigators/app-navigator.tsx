@@ -52,7 +52,7 @@ const AppStack = () => {
       initialRouteName="tabBar"
     >
       <Stack.Screen name="tabBar" component={AppTabBar} />
-      <Stack.Screen name="chat" component={ChatScreen} />
+      <Stack.Screen name="chat" options={{ headerShown: true }} component={ChatScreen} />
     </Stack.Navigator>
   )
 }

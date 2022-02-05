@@ -57,10 +57,6 @@ export const ChatScreen = observer(function ChatScreen() {
   return (
     <Screen style={ROOT} noKeyboardAvoid={true}>
       <GiftedChat bottomOffset={inset.bottom} messages={messages} user={user} onSend={onSend} />
-      <Button
-        style={{ position: "absolute", top: inset.top }}
-        onPress={() => navigation.navigate("tabBar")}
-      />
     </Screen>
   )
 })

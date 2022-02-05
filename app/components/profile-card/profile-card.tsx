@@ -101,20 +101,20 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
 
       runOnJS(scaleBackCard)(interpolate(Math.abs(event.translationX), [0, screenWidth], [0.9, 1]))
     },
-    onEnd: () => {
-      if (!inFront) return
-
-      if (Math.abs(swipeTranslationX.value) > screenWidth * 0.5) {
-        finishSwipeAnimation()
-        runOnJS(scaleBackCard)(1)
-        return
-      }
-
-      runOnJS(scaleBackCard)(0.9)
-      swipeTranslationX.value = withTiming(0, aSwipeConfig)
-      swipeRotation.value = withTiming(0, aSwipeConfig)
-    },
   })
+
+  const onEnd = () => {
+    if (!inFront) return
+
+    if (Math.abs(swipeTranslationX.value) > screenWidth * 0.5) {
+      finishSwipeAnimation()
+      runOnJS(scaleBackCard)(1)
+      return
+    }
+    runOnJS(scaleBackCard)(0.9)
+    swipeTranslationX.value = withTiming(0, aSwipeConfig)
+    swipeRotation.value = withTiming(0, aSwipeConfig)
+  }
 
   const aSwipeStyles = useAnimatedStyle(() => {
     return {
@@ -163,7 +163,7 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
   }
 
   return (
-    <PanGestureHandler onGestureEvent={data && gestureHandler}>
+    <PanGestureHandler onGestureEvent={gestureHandler} onEnded={onEnd}>
       <Animated.View style={[CONTAINER, styles, aSwipeStyles, { zIndex: inFront ? 10 : 5 }]}>
         <ImageBackground
           onLoad={bringNewCard}

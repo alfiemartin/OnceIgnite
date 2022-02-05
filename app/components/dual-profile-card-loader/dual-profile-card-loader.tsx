@@ -1,5 +1,5 @@
 import * as React from "react"
-import { StyleProp, View, ViewStyle } from "react-native"
+import { Image, StyleProp, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { ProfileCard } from ".."
 import { useStores } from "../../models"
@@ -48,6 +48,9 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
   useEffect(() => {
     ;(async () => {
       await profileCardStore.getProfileCards()
+      profiles.forEach(({ image }) => {
+        Image.prefetch(image)
+      })
     })()
   }, [])
 
