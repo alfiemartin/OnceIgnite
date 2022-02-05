@@ -105,7 +105,7 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
 
   const onEnd = () => {
     if (!inFront) return
-    if (Math.abs(swipeTranslationX.value) > screenWidth * 0.5) {
+    if (Math.abs(swipeTranslationX.value) > 100) {
       finishSwipeAnimation()
       runOnJS(scaleBackCard)(1)
       return

@@ -7,7 +7,7 @@
 import React, { useState } from "react"
 import { useColorScheme, View, ViewStyle } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
-import { CardStyleInterpolators, createStackNavigator } from "@react-navigation/stack"
+import { createStackNavigator } from "@react-navigation/stack"
 import { ChatScreen, ExplorerScreen, MatchesScreen, ProfileScreen, TestScreen } from "../screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
@@ -17,6 +17,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { color } from "../theme"
 import { GradientBackground, TabIcon } from "../components"
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -43,35 +44,21 @@ export type TabNavigatorParamList = {
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
-const Stack = createStackNavigator<StackNavigatorParamList>()
+const Stack = createNativeStackNavigator<StackNavigatorParamList>()
 const Tab = createMaterialTopTabNavigator<TabNavigatorParamList>()
 
 const AppStack = () => {
-  const [showSideOverlay, setShowSideOverlay] = useState(true)
-
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        cardOverlay: () => (
-          <View style={{ flex: 1 }}>
-            {showSideOverlay ? <GradientBackground colors={["black", "transparent"]} /> : null}
-          </View>
-        ),
-        cardOverlayEnabled: true,
+        animation: "slide_from_left",
+        gestureEnabled: true,
       }}
       initialRouteName="tabBar"
     >
       <Stack.Screen name="tabBar" component={AppTabBar} />
-      <Stack.Screen
-        name="chat"
-        options={{ headerShown: true }}
-        component={ChatScreen}
-        listeners={{
-          transitionEnd: () => setShowSideOverlay(false),
-          transitionStart: () => setShowSideOverlay(true),
-        }}
-      />
+      <Stack.Screen name="chat" options={{ headerShown: true }} component={ChatScreen} />
     </Stack.Navigator>
   )
 }

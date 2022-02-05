@@ -3,7 +3,6 @@ import { observer } from "mobx-react-lite"
 import { ViewStyle } from "react-native"
 import { Button, Screen, Text } from "../../components"
 import { color } from "../../theme"
-import { useNavigation } from "@react-navigation/native"
 import { GiftedChat, IMessage, User } from "react-native-gifted-chat"
 import { mockProfileCardData } from "../../../mockData"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -16,8 +15,6 @@ const ROOT: ViewStyle = {
 export const ChatScreen = observer(function ChatScreen() {
   const [messages, setMessages] = useState<IMessage[]>([])
   const inset = useSafeAreaInsets()
-
-  const navigation = useNavigation()
 
   useEffect(() => {
     setMessages([
