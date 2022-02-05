@@ -63,7 +63,7 @@ export const ChatPreview = observer(function ChatPreview(props: ChatPreviewProps
         <Image source={{ uri: image }} style={PROFILE_IMAGE} />
         <View style={TEXT_CONTAINER}>
           <Text style={NAME}>{name}</Text>
-          <Text style={PREVIEW_TEXT}>This is a subtext</Text>
+          <Text style={PREVIEW_TEXT}>Hey wys g</Text>
         </View>
       </View>
     </TouchableOpacity>

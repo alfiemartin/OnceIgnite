@@ -35,7 +35,7 @@ export const ChatScreen = observer(function ChatScreen() {
         user: {
           _id: -1,
           name: "React Native",
-          avatar: mockProfileCardData[0].image,
+          avatar: mockProfileCardData[1].image,
         },
       },
     ])
@@ -47,7 +47,7 @@ export const ChatScreen = observer(function ChatScreen() {
     name: "alfie",
   }
 
-  const onSend = useCallback((messages = []) => {
+  const onSend = useCallback((messages: IMessage[] = []) => {
     setMessages((previousMessages) => GiftedChat.append(previousMessages, messages))
   }, [])
 

@@ -29,6 +29,7 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
 
   const { profileCardStore } = useStores()
   const { profiles } = profileCardStore
+
   const initialCardState = [
     {
       cardId: 0,
@@ -44,15 +45,6 @@ export const DualProfileCardLoader = observer(function DualProfileCardLoader(
     },
   ]
   const [cardData, setCardData] = useState(initialCardState)
-
-  useEffect(() => {
-    ;(async () => {
-      await profileCardStore.getProfileCards()
-      profiles.forEach(({ image }) => {
-        Image.prefetch(image)
-      })
-    })()
-  }, [])
 
   const updateCardUi = () => {
     setCardData((oldData) => {

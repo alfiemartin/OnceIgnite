@@ -2,8 +2,6 @@ import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { ListRenderItemInfo, ViewStyle } from "react-native"
 import { ChatPreview, ProfileCard, Screen, Text } from "../../components"
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../../models"
 import { color } from "../../theme"
 import { FlatList } from "react-native-gesture-handler"
 import { useStores } from "../../models"
@@ -17,12 +15,6 @@ export const MatchesScreen = observer(function MatchesScreen() {
   // Pull in one of our MST stores
   const { profileCardStore } = useStores()
   const profiles = profileCardStore.profiles
-
-  useEffect(() => {
-    ;(async () => {
-      profileCardStore.getProfileCards()
-    })()
-  }, [])
 
   return (
     <Screen style={ROOT}>

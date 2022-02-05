@@ -1,10 +1,11 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle } from "react-native"
+import { ImageBackground, View, ViewStyle } from "react-native"
 import { Screen, Text } from "../../components"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../../models"
 import { color } from "../../theme"
+import { useStores } from "../../models"
 
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.black,
@@ -12,14 +13,15 @@ const ROOT: ViewStyle = {
 }
 
 export const ProfileScreen = observer(function ProfileScreen() {
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
+  const { profileCardStore } = useStores()
+  const { profiles } = profileCardStore
 
-  // Pull in navigation via hook
-  // const navigation = useNavigation()
   return (
     <Screen style={ROOT} preset="scroll">
-      <Text preset="header" text="Profile" />
+      <Text preset="header" text="Alfie" style={{ textAlign: "center" }} />
+      <View style={{ height: 100 }}>
+        <ImageBackground style={{ flex: 1 }} source={{ uri: profiles[0].image }}></ImageBackground>
+      </View>
     </Screen>
   )
 })

@@ -1,7 +1,7 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
-import { DualProfileCardLoader, Screen } from "../../components"
+import { DualProfileCardLoader, GradientBackground, Screen } from "../../components"
 import { color } from "../../theme"
 
 const ROOT: ViewStyle = {
@@ -18,6 +18,7 @@ export const ExplorerScreen = observer(function ExplorerScreen(props) {
   return (
     <Screen style={ROOT}>
       <View style={CARD_CONTAINER}>
+        <GradientBackground colors={[color.palette.deepPurple, color.palette.black]} />
         <DualProfileCardLoader />
       </View>
     </Screen>
