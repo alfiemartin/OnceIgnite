@@ -13,8 +13,6 @@ import Icon from "react-native-vector-icons/Ionicons"
 const CONTAINER: ViewStyle = {
   justifyContent: "center",
   alignItems: "center",
-  width: 40,
-  height: 40,
 }
 
 export interface EasyIconProps {
@@ -41,14 +39,12 @@ export const TabIcon = ({ color, icon }: TabIconProps) => {
  * Describe your component here
  */
 export const EasyIcon = observer(function EasyIcon(props: EasyIconProps) {
-  const { style, name, size = 40, onPress, color = "black" } = props
+  const { style, name, size = 30, onPress, color = "black" } = props
   const styles = Object.assign({}, CONTAINER, style)
 
   return (
-    <View style={styles}>
-      <TouchableOpacity onPress={onPress}>
-        <Icon name={name} size={size} color={color} />
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity onPress={onPress}>
+      <Icon name={name} size={size} color={color} />
+    </TouchableOpacity>
   )
 })

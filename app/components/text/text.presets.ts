@@ -6,7 +6,7 @@ import { color, typography } from "../../theme"
  */
 const BASE: TextStyle = {
   fontFamily: typography.primary,
-  color: color.text,
+  color: color.palette.almostWhite,
   fontSize: 15,
 }
 

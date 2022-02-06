@@ -9,6 +9,7 @@ export interface GradientBackgroundProps {
   start?: LinearGradientPoint
   end?: LinearGradientPoint
   locations?: number[]
+  style?: ViewStyle
 }
 
 export function GradientBackground(props: GradientBackgroundProps) {
@@ -18,7 +19,7 @@ export function GradientBackground(props: GradientBackgroundProps) {
       start={props.start}
       end={props.end}
       colors={props.colors}
-      style={BG_GRADIENT}
+      style={[BG_GRADIENT, props.style]}
     />
   )
 }

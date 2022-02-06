@@ -7,7 +7,7 @@ import { FlatList } from "react-native-gesture-handler"
 import { useStores } from "../../models"
 
 const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
+  backgroundColor: color.background,
   flex: 1,
 }
 

@@ -8,7 +8,7 @@ import { useNavigation } from "@react-navigation/native"
 
 const CONTAINER: ViewStyle = {
   flexDirection: "row",
-  backgroundColor: color.palette.black,
+  backgroundColor: color.background,
   marginBottom: spacing[1],
   padding: spacing[1],
 }

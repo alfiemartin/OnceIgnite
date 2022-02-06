@@ -161,6 +161,10 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
     swipeOpacity.value = withTiming(1, instantTiming)
   }
 
+  React.useEffect(() => {
+    console.tron.log("profile rendered")
+  })
+
   return (
     <PanGestureHandler onGestureEvent={gestureHandler} onEnded={onEnd}>
       <Animated.View style={[CONTAINER, styles, aSwipeStyles, { zIndex: inFront ? 10 : 5 }]}>
@@ -170,18 +174,18 @@ export const ProfileCard = observer(function ProfileCard(props: ProfileCardProps
           style={MAIN_IMAGE_CONTAINER}
           imageStyle={MAIN_IMAGE}
         >
-          <Animated.View style={SWIPE_IND_CONTAINER}>
+          {/* <Animated.View style={SWIPE_IND_CONTAINER}>
             <Text style={[{ zIndex: 1000, fontSize: 200 }]}>❤️</Text>
           </Animated.View>
           <Animated.View style={SWIPE_IND_CONTAINER}>
             <Text style={[{ zIndex: 1000, fontSize: 200 }]}>❌</Text>
-          </Animated.View>
+          </Animated.View> */}
         </ImageBackground>
         {data && (
           <View style={CHOICES_CONTAINER}>
-            <EasyIcon name="ios-close-circle" onPress={() => swipeInDirection("left")} />
-            <EasyIcon name="ios-heart-half" />
-            <EasyIcon name="heart" onPress={() => swipeInDirection("right")} />
+            <EasyIcon size={40} name="ios-close-circle" onPress={() => swipeInDirection("left")} />
+            <EasyIcon size={40} name="ios-heart-half" />
+            <EasyIcon size={40} name="heart" onPress={() => swipeInDirection("right")} />
           </View>
         )}
       </Animated.View>

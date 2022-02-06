@@ -1,19 +1,28 @@
 import * as React from "react"
 import { ImageBackground, StyleProp, TextStyle, View, ViewStyle, Text } from "react-native"
 import { observer } from "mobx-react-lite"
-import { color, spacing, typography } from "../../theme"
+import { color, SHADOW, spacing, typography } from "../../theme"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { GradientBackground } from ".."
 
 const CONTAINER: ViewStyle = {
   justifyContent: "center",
   marginBottom: spacing[5],
+  height: 200,
+  // ...SHADOW,
+  // shadowColor: "#000",
 }
 
 const TEXT: TextStyle = {
   fontFamily: typography.primary,
   fontSize: 20,
   color: color.primary,
+}
+
+const IMAGE_BACKGROUND: ViewStyle = {
+  flex: 1,
+  justifyContent: "flex-end",
+  padding: spacing[2],
 }
 
 export interface ImageBoxProps {
@@ -25,6 +34,8 @@ export interface ImageBoxProps {
   text?: string
 }
 
+const BORDER_RADIUS = 10
+
 /**
  * A fixed height box with a background image
  */
@@ -33,15 +44,16 @@ export const ImageBox = observer(function ImageBox(props: ImageBoxProps) {
   const styles = Object.assign({}, CONTAINER, style)
 
   return (
-    <View style={[styles, { height: 200 }]}>
+    <View style={[styles]}>
       <TouchableOpacity style={{ flex: 1 }} containerStyle={{ flex: 1 }}>
         <ImageBackground
-          style={{ flex: 1, justifyContent: "flex-end", padding: spacing[2] }}
-          imageStyle={{ borderRadius: 10 }}
+          style={IMAGE_BACKGROUND}
+          imageStyle={{ borderRadius: BORDER_RADIUS }}
           source={{ uri: image }}
         >
           <GradientBackground
-            colors={["transparent", color.palette.black]}
+            style={{ borderRadius: BORDER_RADIUS, transform: [{ scale: 1.1 }] }}
+            colors={["transparent", color.palette.transBlack]}
             start={[0, 0.6]}
             end={[0, 1]}
           />

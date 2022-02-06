@@ -4,11 +4,10 @@
  * Generally speaking, it will contain an auth flow (registration, login, forgot password)
  * and a "main" flow which the user will use once logged in.
  */
-import React, { useState } from "react"
-import { useColorScheme, View, ViewStyle } from "react-native"
+import React from "react"
+import { useColorScheme, ViewStyle } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
-import { createStackNavigator } from "@react-navigation/stack"
-import { ChatScreen, ExplorerScreen, MatchesScreen, ProfileScreen, TestScreen } from "../screens"
+import { ChatScreen, ExplorerScreen, MatchesScreen, ProfileScreen } from "../screens"
 import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
 import {
   createMaterialTopTabNavigator,
@@ -16,7 +15,7 @@ import {
 } from "@react-navigation/material-top-tabs"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { color } from "../theme"
-import { GradientBackground, TabIcon } from "../components"
+import { TabIcon } from "../components"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
 /**
@@ -52,8 +51,10 @@ const AppStack = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        animation: "slide_from_left",
+        animation: "slide_from_right",
         gestureEnabled: true,
+        headerStyle: { backgroundColor: color.background },
+        headerTintColor: color.primary,
       }}
       initialRouteName="tabBar"
     >
@@ -70,15 +71,15 @@ const AppTabBar = () => {
     tabBarItemStyle: { marginBottom: inset.bottom },
     tabBarIndicator: () => null,
     tabBarContentContainerStyle: {
-      backgroundColor: color.palette.black, //tab bar background
+      backgroundColor: color.palette.fullBlack, //tab bar background
     },
     tabBarLabel: () => null,
     tabBarInactiveTintColor: color.palette.offWhite,
-    tabBarActiveTintColor: color.palette.orange,
+    tabBarActiveTintColor: color.palette.deepPurple,
   }
 
   const parentStyles: ViewStyle = {
-    backgroundColor: color.palette.black,
+    backgroundColor: color.palette.fullBlack,
   }
 
   return (
@@ -100,11 +101,11 @@ const AppTabBar = () => {
         component={ProfileScreen}
         options={{ tabBarIcon: ({ color }) => <TabIcon color={color} icon="person-outline" /> }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="test"
         component={TestScreen}
         options={{ tabBarIcon: ({ color }) => <TabIcon color={color} icon="build-outline" /> }}
-      />
+      /> */}
     </Tab.Navigator>
   )
 }
